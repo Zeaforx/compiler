@@ -47,7 +47,7 @@ class Helpers:
         while True:
             if trigger == "n" or "N":
                 break
-    
+
     from anytree import Node
 
     def nltk_tree_to_anytree(self, nltk_tree, parent=None):
@@ -66,7 +66,6 @@ class Helpers:
         root = nltk_tree_to_anytree(trees[0])
     else:
         root = None
-
 
     # def verb_phrase_formatting(self, lexical_table):
     #     # root = Node("S")
@@ -213,45 +212,6 @@ class Compiler:
         return lexical_table
 
     def syntax_analysis(self, lexical_table):
-
-        structural_rules = """
-        S -> NP VP
-        NP -> PRON | DET ADJ NOUN | DET NOUN
-        VP -> VERB NP | VERB PP | VERB
-        PP -> ADV NP
-        """
-
-        # Step 2: Generate terminal rules from lexical table
-        terminals = defaultdict(set)
-        for item in lexical_table:
-            tag = item["lexeme"].strip("<>").upper()
-            terminals[tag].add(item["token"])
-
-        terminal_rules = ""
-        for tag, words in terminals.items():
-            quoted = [f"'{word}'" for word in sorted(words)]
-            terminal_rules += f"{tag} -> {' | '.join(quoted)}\n"
-
-        # Step 3: Combine structural and terminal rules
-        full_grammar = structural_rules + "\n" + terminal_rules
-
-        # Step 4: Create grammar
-        grammar = CFG.fromstring(full_grammar)
-        parser = ChartParser(grammar)
-        sentence = []
-        for item in lexical_table:
-            tag = item["token"]
-            sentence.append(tag)
-
-        print(parser.parse(sentence))
-        print(type(parser.parse(sentence)))
-        for tree in parser.parse(sentence):
-            tree.pretty_print()
-
-        # Optional: print full grammar
-        print("Full Grammar:\n")
-        print(full_grammar)
-        print(type(full_grammar))
 
         root = Node("S")
         # for i in range(len(starting_symbol)):
