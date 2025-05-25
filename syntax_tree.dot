@@ -5,7 +5,7 @@ digraph tree {
     "0x3" [label="<ADJ>"];
     "0x4" [label="quick"];
     "0x5" [label="<ADJ>"];
-    "0x6" [label="red"];
+    "0x6" [label="yellow"];
     "0x7" [label="<NOUN>"];
     "0x8" [label="fox"];
     "0x9" [label="<VERB>"];

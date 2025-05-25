@@ -47,7 +47,7 @@ class Helpers:
         while True:
             if trigger == "n" or "N":
                 break
-    
+
     from anytree import Node
 
     def nltk_tree_to_anytree(self, nltk_tree, parent=None):
@@ -59,14 +59,6 @@ class Helpers:
             else:
                 Helpers.nltk_tree_to_anytree(child, parent=node)
         return node
-
-    # Use the first parse tree (if exists)
-    trees = list(parser.parse(sentence))
-    if trees:
-        root = nltk_tree_to_anytree(trees[0])
-    else:
-        root = None
-
 
     # def verb_phrase_formatting(self, lexical_table):
     #     # root = Node("S")
@@ -213,6 +205,7 @@ class Compiler:
         return lexical_table
 
     def syntax_analysis(self, lexical_table):
+        helpers = Helpers()
 
         structural_rules = """
         S -> NP VP
@@ -242,6 +235,19 @@ class Compiler:
         for item in lexical_table:
             tag = item["token"]
             sentence.append(tag)
+        # Use the first parse tree (if exists)
+        trees = list(parser.parse(sentence))
+
+        if trees:
+            root = helpers.nltk_tree_to_anytree(trees[0])
+            UniqueDotExporter(root).to_dotfile("syntax_tree.dot")
+            subprocess.run(
+                ["dot", "syntax_tree.dot", "-Tpng", "-o", "syntax_tree.png"], check=True
+            )
+            print("Syntax tree saved as syntax_tree.png")
+
+        else:
+            root = None
 
         print(parser.parse(sentence))
         print(type(parser.parse(sentence)))
@@ -346,7 +352,7 @@ class Compiler:
 
 
 if __name__ == "__main__":
-    t = Compiler("The quick red fox jumps over the lazy dog.")
+    t = Compiler("The quick yellow fox jumps over the lazy dog.")
     t.run_compiler()
 
 logger = [
